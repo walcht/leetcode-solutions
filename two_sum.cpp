@@ -10,6 +10,9 @@ public:
   vector<int> twoSum(vector<int> &nums, int target) {
     unordered_map<int, int> complement_map;
 
+    // the idea is to look for the complement of each element in a hash table.
+    // if that complement does not exist, save the current value in the hash
+    // tabe
     for (int i = 0; i < nums.size(); i++) {
       auto got = complement_map.find(target - nums[i]);
       if (got != complement_map.end()) {
@@ -26,19 +29,12 @@ public:
   // Memory: O(1)
   vector<int> twoSum_01(vector<int> &nums, int target) {
 
-    vector<int> target_couple(2);
+    for (int i = 0; i < nums.size(); i++)
+      for (int j = i + 1; j < nums.size(); j++)
+        if (nums[i] + nums[j] == target)
+          return vector<int>{i, j};
 
-    for (int i = 0; i < nums.size() - 1; i++) {
-      for (int j = i + 1; j < nums.size(); j++) {
-        if (nums[i] + nums[j] == target) {
-          target_couple[0] = i;
-          target_couple[1] = j;
-          return target_couple;
-        }
-      }
-    }
-
-    return target_couple; // no worries about copying, copy elision
-                          // optmizationtakes care of it
+    return vector<int>{-1, -1}; // no worries about copying, copy elision
+                                // optmizationtakes care of it
   }
 };

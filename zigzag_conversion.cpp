@@ -6,48 +6,40 @@ class Solution {
 public:
   string convert(string s, int numRows) {
 
+    // no need to do anything if we have less than 1 row
+    if (numRows <= 1)
+      return s;
+
     string result;
 
+    // global initial index in string s to start jumping sequence from
     int initial_index = 0;
 
     int current_jump = 2 * numRows - 3;
-    if (current_jump < 0)
-      current_jump = 0;
+    int complementary_jump = -1;
 
-    int initial_jump = current_jump;
+    while (current_jump >= -1) {
 
-    auto last_row_jumps = [&]() {
       int current_index = initial_index;
 
       while (current_index < s.length()) {
-        result.append(1, s[current_index]);
-        current_index += initial_jump + 1;
-      }
-    };
 
-    // intermediate values where 2 jumps are performed each run
-    while (current_jump > 1) {
-
-      int current_index = initial_index;
-      int jump_in_between = initial_jump - current_jump - 1;
-
-      while (current_index < s.length()) {
-
-        result.append(1, s[current_index]);
-        current_index += current_jump + 1;
-
-        if (current_index < s.length()) {
+        if (current_jump > 0) {
           result.append(1, s[current_index]);
-          current_index += jump_in_between + 1;
+          current_index += current_jump + 1;
+        }
+
+        if ((complementary_jump > 0) && (current_index < s.length())) {
+          result.append(1, s[current_index]);
+          current_index += complementary_jump + 1;
         }
       }
 
       current_jump -= 2;
+      complementary_jump += 2;
+
       ++initial_index;
     }
-
-    // perfom jumps on last row
-    last_row_jumps();
 
     return result;
   }
